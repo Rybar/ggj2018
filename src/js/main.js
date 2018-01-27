@@ -19,12 +19,15 @@ init = () => {
   now = 0;
   t = 0;
   bx = 0,
-  kev_x = 0,
-  kev_y = HEIGHT,
+  fill_y = HEIGHT,
   filling = 0,
   time_left = 0,
   duration = 180,
   fillColor = 3,
+  prevFillColor = 5,
+  five_div = {division:5, next_div:0},
+  thirty_div = {division:30, next_div:0},
+  next_duration = 180,
   platformInterval = 40;
   platformSpeed = .6;
   playerSpeed = 2;
