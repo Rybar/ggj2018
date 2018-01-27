@@ -1,0 +1,8 @@
+Screen Res: 320 x 180
+
+Action	Frames
+
+Default	1
+Jump	2-6
+Land	6-1
+Walk	7-10
