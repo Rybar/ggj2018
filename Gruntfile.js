@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 
 			scripts: {
 				files: ['src/js/**/*.js'],
-				tasks: ['concat:dist', 'uglify:development'],
+				tasks: ['concat:dist', 'build'],
 			},
 			css: {
 				files: 'src/css/**/*.less',
