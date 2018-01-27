@@ -1112,7 +1112,15 @@ function LCG(seed = Date.now(), a = 1664525, c = 1013904223, m = Math.pow(2,32) 
     return "#" + c;
   }
 
-
+function per_time(div_obj) {
+  var isDivision = false;
+  if((0 === Math.trunc(t) % Math.trunc(div_obj.division)) && (t >= div_obj.next_div))
+  {
+    div_obj.next_div = Math.trunc(t) + Math.trunc(div_obj.division);
+    isDivision = true;
+  } 
+  return isDivision;
+}
 
 //--------END Engine.js-------------------
 
@@ -1527,6 +1535,15 @@ init = () => {
   now = 0;
   t = 0;
   bx = 0,
+  fill_y = HEIGHT,
+  filling = 0,
+  time_left = 0,
+  duration = 180,
+  fillColor = 3,
+  prevFillColor = 5,
+  five_div = {division:5, next_div:0},
+  thirty_div = {division:30, next_div:0},
+  next_duration = 180,
   platformInterval = 40;
   platformSpeed = .6;
 
@@ -1743,10 +1760,62 @@ states.menu = {//
 
 states.game = {
 
-  
-
   step(dt) {
-    bx = WIDTH/2 + 60*cos(t/2);
+    // if(Math.trunc(t) % 4 === 0)
+    // {
+    //   kev_x = (WIDTH-20)/2 * cos(t/2) + (WIDTH-20)/2;
+    // }
+    // else if(Math.trunc(t) % 4 === 1)
+    // {
+    //   kev_y = (HEIGHT-40)/2 - (HEIGHT-40)/2 * cos(t/2);
+    // }
+    // else if(Math.trunc(t) % 4 === 2)
+    // {
+    //   kev_x = (WIDTH-20)/2 - (WIDTH-20)/2 * cos(t/2);
+    // }
+    // else
+    // {
+    //   kev_y = (HEIGHT-40)/2 + (HEIGHT-40)/2 * cos(t/2);
+    // }
+    // console.log("("+ kev_x + "," + kev_y + ")");
+
+    if(per_time(five_div))
+    {
+      time_left = duration;
+      filling = 1;
+      prevFillColor = fillColor;
+      ++fillColor;
+      if(6 == fillColor)
+      {
+        fillColor = 3;
+      }
+    }
+
+    if(1 === filling)
+    {
+      fill_y = (duration - time_left) * HEIGHT / duration;
+      --time_left;
+      if(0 >= time_left)
+      {
+        filling = 0;
+        fill_y = HEIGHT;
+      }
+    }
+    else if(duration != next_duration)
+    {
+      duration = next_duration;
+    }
+
+    if(Key.isDown(Key.UP))
+    {
+      next_duration = (next_duration <= 232) ? next_duration + 18 : next_duration = 250;
+      console.log("duration changed to: " + next_duration);
+    }
+    if(Key.isDown(Key.DOWN))
+    {
+      next_duration = (next_duration >= 48) ? next_duration - 18 : next_duration = 30;
+      console.log("duration changed to: " + next_duration);
+    }
     if(Key.isDown(Key.f)){
       state = 'gameover';
     }
@@ -1755,7 +1824,11 @@ states.game = {
   render(dt) {
     renderTarget = SCREEN; clear(0);
     pat = dither[8];
-    fillRect(bx-20, 60, bx+20, 140, 4,5);
+    fillRect(0, 0, WIDTH, fill_y, fillColor, fillColor);
+    if(1 === filling)
+    {
+      fillRect(0, fill_y + 1, WIDTH, HEIGHT, prevFillColor, prevFillColor);
+    }
   }
 }
 

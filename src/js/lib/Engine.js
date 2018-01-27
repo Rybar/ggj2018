@@ -1104,6 +1104,14 @@ function LCG(seed = Date.now(), a = 1664525, c = 1013904223, m = Math.pow(2,32) 
     return "#" + c;
   }
 
-
+function per_time(div_obj) {
+  var isDivision = false;
+  if((0 === Math.trunc(t) % Math.trunc(div_obj.division)) && (t >= div_obj.next_div))
+  {
+    div_obj.next_div = Math.trunc(t) + Math.trunc(div_obj.division);
+    isDivision = true;
+  } 
+  return isDivision;
+}
 
 //--------END Engine.js-------------------
