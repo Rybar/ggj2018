@@ -43,7 +43,7 @@ init = () => {
     y: 100,
     xvel: 0,
     yvel: 0,
-    xSpeed: 80,
+    xSpeed: 180,
     ySpeed: 600,
     drag: .8,
     gravity: 15,

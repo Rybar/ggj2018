@@ -109,14 +109,18 @@ states.proto = {
 
         // input
         if (Key.isDown(Key.d)) {
+            if (p0.x > (WIDTH / 2) - 16) p0.x = (WIDTH / 2) - 16;
+
             p0.facingLeft = false;
             p0.xvel =  p0.xSpeed;
           }
           if (Key.isDown(Key.a)){
+            if (p0.x < 0) p0.x = 0;
+
             p0.facingLeft = true;
             p0.xvel =  - p0.xSpeed;
           }
-          if(Key.isDown(Key.w) ||  Key.isDown(Key.SPACE)){
+          if(Key.isDown(Key.w) || Key.isDown(Key.SPACE)){
             if(!p0.jumping){
               p0.jumping = true;
               p0.yvel = -p0.ySpeed;
