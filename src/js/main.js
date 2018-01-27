@@ -3,6 +3,7 @@
 states = {};
 
 init = () => {
+  
   stats = new Stats();
   stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild( stats.dom );
@@ -18,7 +19,49 @@ init = () => {
   now = 0;
   t = 0;
   bx = 0,
-  state = 'menu';
+  platformInterval = 40;
+  platformSpeed = .6;
+  playerSpeed = 2;
+  state = 'proto';
+
+  players = [{
+    x: 0,
+    y: 0,
+    xVelocity: 0,
+    yVelocity: 0,
+    ySpeed: playerSpeed
+  },
+
+  {
+    x: 0,
+    y: 0,
+    xVelocity: 0,
+    yVelocity: 0,
+    ySpeed: playerSpeed
+  } ]
+
+
+  platforms = [];
+  backgroundOrbs = [];
+
+  for(let i= 0; i < 10; i++){
+    platforms.push({
+      x: Math.random()*WIDTH/2,
+      y: i*platformInterval,
+      color: Math.random()*12 + 4|0,
+      width: Math.random()*50|0,
+    })
+  }
+
+  for(let i= 0; i < 20; i++){
+    backgroundOrbs.push({
+      x: Math.random()*WIDTH/2,
+      y: i*10,
+      r: Math.random()*30,
+      dither: Math.random()*6+7|0,
+      color: 29
+    })
+  }
   
 
 
@@ -47,9 +90,17 @@ window.addEventListener('blur', function (event) {
 window.addEventListener('focus', function (event) {
   paused = false;
 }, false);
+window.addEventListener("gamepadconnected", function(e) {
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+  e.gamepad.index, e.gamepad.id,
+  e.gamepad.buttons.length, e.gamepad.axes.length);
+});
 
 loop = e => {
   stats.begin();
+  gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+  gp0 = gamepads[0];
+  gp1 = gamepads[1];
 
   if(paused){
 
@@ -69,12 +120,12 @@ loop = e => {
   }else {
     pal = palDefault;
     //game timer
-    let now = new Date().getTime();
-    dt = Math.min(1, (now - last) / 1000);
-    t += dt;
+    //let now = new Date().getTime();
+    //dt = Math.min(1, (now - last) / 1000);
+    t += 1;
 
     states[state].step(dt);
-    last = now;
+    //last = now;
 
     //draw current state to buffer
     states[state].render();

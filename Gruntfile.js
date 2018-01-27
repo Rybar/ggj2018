@@ -30,6 +30,7 @@ module.exports = function(grunt) {
 					'src/js/states/gameoverstate.js',
 					'src/js/states/menustate.js',
 					'src/js/states/gamestate.js',
+					'src/js/states/protostate.js',
 					'src/js/states/loadingstate.js',
 
 					'src/js/last.js'

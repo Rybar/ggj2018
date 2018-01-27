@@ -1034,6 +1034,10 @@ Key = {
     f: 70,
     p: 80,
     r: 82,
+    i: 73,
+    j: 74,
+    k: 75,
+    l: 76,
 
     isDown(keyCode) {
         return this._pressed[keyCode];
@@ -1507,6 +1511,7 @@ sonantx.MusicGenerator.prototype.createAudioBuffer = function(callBack) {
 states = {};
 
 init = () => {
+  
   stats = new Stats();
   stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild( stats.dom );
@@ -1522,7 +1527,49 @@ init = () => {
   now = 0;
   t = 0;
   bx = 0,
-  state = 'menu';
+  platformInterval = 40;
+  platformSpeed = .6;
+  playerSpeed = 2;
+  state = 'proto';
+
+  players = [{
+    x: 0,
+    y: 0,
+    xVelocity: 0,
+    yVelocity: 0,
+    ySpeed: playerSpeed
+  },
+
+  {
+    x: 0,
+    y: 0,
+    xVelocity: 0,
+    yVelocity: 0,
+    ySpeed: playerSpeed
+  } ]
+
+
+  platforms = [];
+  backgroundOrbs = [];
+
+  for(let i= 0; i < 10; i++){
+    platforms.push({
+      x: Math.random()*WIDTH/2,
+      y: i*platformInterval,
+      color: Math.random()*12 + 4|0,
+      width: Math.random()*50|0,
+    })
+  }
+
+  for(let i= 0; i < 20; i++){
+    backgroundOrbs.push({
+      x: Math.random()*WIDTH/2,
+      y: i*10,
+      r: Math.random()*30,
+      dither: Math.random()*6+7|0,
+      color: 29
+    })
+  }
   
 
 
@@ -1551,9 +1598,17 @@ window.addEventListener('blur', function (event) {
 window.addEventListener('focus', function (event) {
   paused = false;
 }, false);
+window.addEventListener("gamepadconnected", function(e) {
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+  e.gamepad.index, e.gamepad.id,
+  e.gamepad.buttons.length, e.gamepad.axes.length);
+});
 
 loop = e => {
   stats.begin();
+  gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+  gp0 = gamepads[0];
+  gp1 = gamepads[1];
 
   if(paused){
 
@@ -1573,12 +1628,12 @@ loop = e => {
   }else {
     pal = palDefault;
     //game timer
-    let now = new Date().getTime();
-    dt = Math.min(1, (now - last) / 1000);
-    t += dt;
+    //let now = new Date().getTime();
+    //dt = Math.min(1, (now - last) / 1000);
+    t += 1;
 
     states[state].step(dt);
-    last = now;
+    //last = now;
 
     //draw current state to buffer
     states[state].render();
@@ -1683,6 +1738,101 @@ states.game = {
 
 
 //---END gamestate.js------------------------------
+
+states.proto = {
+
+    step: function(dt) {
+        
+
+        //game update
+        platforms.forEach( function(p,i,arr){
+        });
+
+        this.updatePlayer();
+    },
+
+
+    render: function(dt) {
+
+        this.drawThings(0);
+        this.drawThings(1);
+
+    },
+
+    drawThings: function(side) {
+        viewY = players[side].y;
+        renderTarget = BUFFER; //drawing to RAM page at address BUFFER
+        clear(30);
+        cursorColor2 = 0;
+        backgroundOrbs.forEach(function(orb){
+            pat = dither[orb.dither ]; //a dither between half and almost invisible
+            fillCircle(orb.x, orb.y-viewY, orb.r, orb.color);
+
+        })
+        platforms.forEach( function(p){
+            pat = dither[0];
+            fillRect(p.x, p.y-viewY, p.x+p.width, p.y+10-viewY, p.color, p.color-1);
+        });
+
+        renderTarget = SCREEN;
+        let startDrawX = side== 0 ? 0 : WIDTH/2;
+        let endDrawX = side== 0 ? WIDTH/2 : WIDTH;
+        pat = dither[0]; //solid fill.
+
+        //screen clear for HALF the screen
+        fillRect(startDrawX, HEIGHT, endDrawX,  HEIGHT, 30) 
+        spr(0,0,WIDTH/2,HEIGHT, side==0 ? 0 : WIDTH/2, 0)
+
+    },
+
+    updatePlayer: function() {
+        var p0 = players[0];
+        var p1 = players[1];
+
+        p0.yVelocity*= .5;
+        p0.xVelocity = 0;
+        p1.yVelocity*= .5;
+        p1.xVelocity = 0;
+
+        // player 0  keyboard input handling----------    
+        if(Key.isDown(Key.w)){
+            players[0].y-=2 
+        } else if(Key.isDown(Key.s)){
+            players[0].y+=2
+        }
+        // player 1 keyboard input handling---------- 
+        if(Key.isDown(Key.i)){
+            players[1].y-= players[1].ySpeed * t/60;
+        } else if(Key.isDown(Key.k)){
+            players[1].y+= players[1].ySpeed * t/60;
+        }
+
+        // gamepad input handling
+        
+            //have to check, will bail if doesn't exist.
+            if(gp0){
+                //console.log(gp0.axes[1]);
+                if(Math.abs(gp0.axes[1]) > .1){
+                    p0.y += gp0.axes[1] * p0.ySpeed;   
+                }
+            }
+            if(gp1){
+                if(Math.abs(gp1.axes[1]) > .1){
+                    p1.y += gp1.axes[1] * p1.ySpeed;
+                }
+            }
+            
+        p0.y += p0.yVelocity;
+        p1.y += p1.yVelocity;
+
+    },
+
+    drawPlayer: function(player) {
+        let p = players[player];
+        fillRect(p.x, py, 16, 16);
+    }
+
+};
 
 states.loading = {
 
