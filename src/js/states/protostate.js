@@ -8,25 +8,32 @@ states.proto = {
         });
 
         this.updatePlayer();
+
+        
+        
     },
 
 
     render: function(dt) {
-
+        
+        viewY = players[0].y - HEIGHT/2;
         this.drawThings(0);
+        this.drawPlayer(0);
+
+
+        viewY = players[1].y - HEIGHT/2;
         this.drawThings(1);
+        this.drawPlayer(1);
 
     },
 
     drawThings: function(side) {
-        viewY = players[side].y;
         renderTarget = BUFFER; //drawing to RAM page at address BUFFER
         clear(30);
         cursorColor2 = 0;
         backgroundOrbs.forEach(function(orb){
             pat = dither[orb.dither ]; //a dither between half and almost invisible
             fillCircle(orb.x, orb.y-viewY, orb.r, orb.color);
-
         })
         platforms.forEach( function(p){
             pat = dither[0];
@@ -45,50 +52,71 @@ states.proto = {
     },
 
     updatePlayer: function() {
+        //console.log(Key._pressed)
+        
         var p0 = players[0];
         var p1 = players[1];
 
-        p0.yVelocity*= .5;
-        p0.xVelocity = 0;
-        p1.yVelocity*= .5;
-        p1.xVelocity = 0;
-
-        // player 0  keyboard input handling----------    
-        if(Key.isDown(Key.w)){
-            players[0].y-=2 
-        } else if(Key.isDown(Key.s)){
-            players[0].y+=2
-        }
-        // player 1 keyboard input handling---------- 
         if(Key.isDown(Key.i)){
-            players[1].y-= players[1].ySpeed * t/60;
-        } else if(Key.isDown(Key.k)){
-            players[1].y+= players[1].ySpeed * t/60;
+            console.log(p0);
         }
+        console.log(p0)
+        // player 0--------------------------- 
+        p0.oldX = p0.x;
+        p0.oldY = p0.y;
+        p0.xvel *= p0.drag;  
+        p0.yvel += p0.gravity;
+        p0.yvel = p0.yvel.clamp(p0.minYvel, p0.maxYvel);
+        p0.xvel = p0.xvel.clamp(p0.minXvel, p0.maxXvel);
 
+        let dx = 1/60 * p0.xvel;
+        let dy = 1/60 * p0.yvel;
+
+        p0.x += dx;
+        //collision resolution here
+        p0.y += dy;
+        //collision y resolution here
+
+        if(p0.yvel > 0){
+            p0.jumping = false;
+        }
+        if (Key.isDown(Key.d)) {
+            p0.facingLeft = false;
+            p0.xvel =  p0.xSpeed;
+          }
+          if (Key.isDown(Key.a)){
+            p0.facingLeft = true;
+            p0.xvel =  - p0.xSpeed;
+          }
+          if(Key.isDown(Key.w)){
+            if(!p0.jumping){
+              p0.jumping = true;
+              p0.yvel = -p0.ySpeed;
+            }
+          }
+        // player 1 keyboard input handling---------- 
+        
+        
         // gamepad input handling
         
             //have to check, will bail if doesn't exist.
-            if(gp0){
-                //console.log(gp0.axes[1]);
-                if(Math.abs(gp0.axes[1]) > .1){
-                    p0.y += gp0.axes[1] * p0.ySpeed;   
-                }
-            }
-            if(gp1){
-                if(Math.abs(gp1.axes[1]) > .1){
-                    p1.y += gp1.axes[1] * p1.ySpeed;
-                }
-            }
+            // if(gp0){
+            //     //console.log(gp0.axes[1]);
+            //     if(Math.abs(gp0.axes[0]) > .1){
+            //         p0.xVelocity += gp0.axes[0] * p0.ySpeed;   
+            //     }
+            //     if(gp0.buttons[11]){
+            //         p0.yVelocity = -jumpVelocity;
+            //     }
+            // }
             
-        p0.y += p0.yVelocity;
-        p1.y += p1.yVelocity;
 
     },
 
     drawPlayer: function(player) {
         let p = players[player];
-        fillRect(p.x, py, 16, 16);
+        renderTarget = SCREEN; 
+        fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, Math.random()*63, Math.random()*63);
     }
 
 };
