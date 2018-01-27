@@ -4,8 +4,15 @@ states.proto = {
         
 
         //game update
-        platforms.forEach( function(p,i,arr){
-            
+        platforms.forEach( function(p, index, arr){
+            pat = dither[0];
+            if(p.y - viewY > HEIGHT + 20){  // Off the screen
+                arr.splice(index, 1) // Remove platform
+                var platform1 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, 19,0) //create new platform
+                var platform2 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, 3,0) //create new platform
+                arr.push(platform1)  //Add new platform
+                arr.push(platform2)  //Add new platform
+            }
         });
 
         this.updatePlayer();
@@ -47,11 +54,12 @@ states.proto = {
             if(p.y - viewY < HEIGHT && p.y - viewY > 0){
                 renderTarget = BUFFER;
                 pat = dither[0];
-                fillRect(p.x, p.y-viewY, p.x+p.width, p.y+10-viewY, p.color, p.color-1);
+                fillRect(p.x, p.y-viewY, p.x2, p.y2-viewY, p.color, p.color-1); 
                 renderTarget = COLLISION;
-                fillRect(p.x, p.y-viewY, p.x+p.width, p.y+10-viewY, 1);
+                fillRect(p.x, p.y-viewY, p.x2, p.y2-viewY, p.color); 
             }   
         });
+        
 
         renderTarget = SCREEN;
         let startDrawX = side== 0 ? 0 : WIDTH/2;

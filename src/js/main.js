@@ -74,17 +74,38 @@ init = () => {
     jumpCooldown: 0
   } ]
 
+  difficulties = [ 
+    { 
+      level:"low", 
+      platformMaxSize: WIDTH/2, 
+      platformMinSize: 50,
+    }, 
+    { 
+      level:"medium", 
+      platformMaxSize: WIDTH/4,  
+      platformMinSize: 25,
+    }, 
+    { 
+      level:"high", 
+      platformMaxSize:WIDTH/6, 
+      platformMinSize: 20,
+    } 
+  ] 
+ 
+  difficulty = difficulties[2]; 
 
   platforms = [];
   backgroundOrbs = [];
 
-  for(let i= -100; i < 100; i++){
-    platforms.push({
-      x: Math.random()*WIDTH/2,
-      y: i*platformInterval,
-      color: Math.random()*12 + 4|0,
-      width: Math.random()*50+30|0,
-    })
+  platformColors = [3,19, 35]
+
+  for(let i= HEIGHT; i > -300; i-=platformInterval){
+    let color1 = Math.floor(Math.random() * Math.floor(3));
+    // let color2 = Math.floor(Math.random() * Math.floor(2));
+    var platform1 = generatePlatform(i,difficulty, platformColors[color1], 0)
+    // var platform2 = generatePlatform(i,difficulty, 19, 0)
+    platforms.push(platform1)
+    // platforms.push(platform2)
   }
 
   for(let i= -100; i < 100; i++){
@@ -96,7 +117,6 @@ init = () => {
       color: 29
     })
   }
-  
 
 
   //FLAGS--------------------------------------------------------------
@@ -172,5 +192,21 @@ loop = e => {
   requestAnimationFrame(loop);
 }
 
+generatePlatform = (yIndex,difficulty, color1, color2) =>{ 
+  var platformWidth = Math.floor(Math.random() * (difficulty.platformMaxSize-difficulty.platformMinSize)) + difficulty.platformMinSize
+  var lowerBounds = platformWidth/2;
+  var upperBounds = (WIDTH/2) - (platformWidth/2)
+  var centerPoint =Math.floor(Math.random() * upperBounds-lowerBounds) + lowerBounds
+  console.log('width:'+ platformWidth)
+  var platform = { 
+    x: centerPoint - platformWidth/2, 
+    y: yIndex, 
+    x2: centerPoint + platformWidth/2, 
+    y2: yIndex + 5, 
+    color: color1, 
+    color2: color2 
+  } 
+  return platform; 
+} 
 
 //----- END main.js---------------
