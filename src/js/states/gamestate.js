@@ -3,24 +3,6 @@
 states.game = {
 
   step(dt) {
-    // if(Math.trunc(t) % 4 === 0)
-    // {
-    //   kev_x = (WIDTH-20)/2 * cos(t/2) + (WIDTH-20)/2;
-    // }
-    // else if(Math.trunc(t) % 4 === 1)
-    // {
-    //   kev_y = (HEIGHT-40)/2 - (HEIGHT-40)/2 * cos(t/2);
-    // }
-    // else if(Math.trunc(t) % 4 === 2)
-    // {
-    //   kev_x = (WIDTH-20)/2 - (WIDTH-20)/2 * cos(t/2);
-    // }
-    // else
-    // {
-    //   kev_y = (HEIGHT-40)/2 + (HEIGHT-40)/2 * cos(t/2);
-    // }
-    // console.log("("+ kev_x + "," + kev_y + ")");
-
     if(per_time(five_div))
     {
       time_left = duration;
