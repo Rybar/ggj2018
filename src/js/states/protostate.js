@@ -5,6 +5,7 @@ states.proto = {
 
         //game update
         platforms.forEach( function(p,i,arr){
+            
         });
 
         this.updatePlayer();
@@ -28,16 +29,28 @@ states.proto = {
     },
 
     drawThings: function(side) {
-        renderTarget = BUFFER; //drawing to RAM page at address BUFFER
+
+        renderTarget = COLLISION; 
+        clear(0);
+        renderTarget = BUFFER;
         clear(30);
         cursorColor2 = 0;
         backgroundOrbs.forEach(function(orb){
-            pat = dither[orb.dither ]; //a dither between half and almost invisible
-            fillCircle(orb.x, orb.y-viewY, orb.r, orb.color);
+            if(orb.y - viewY < HEIGHT + 100 && orb.y - viewY > 0 - 100){
+                renderTarget = BUFFER;
+                pat = dither[orb.dither ]; //a dither between half and almost invisible
+                fillCircle(orb.x, orb.y-viewY, orb.r, orb.color);
+            }
+            
         })
         platforms.forEach( function(p){
-            pat = dither[0];
-            fillRect(p.x, p.y-viewY, p.x+p.width, p.y+10-viewY, p.color, p.color-1);
+            if(p.y - viewY < HEIGHT && p.y - viewY > 0){
+                renderTarget = BUFFER;
+                pat = dither[0];
+                fillRect(p.x, p.y-viewY, p.x+p.width, p.y+10-viewY, p.color, p.color-1);
+                renderTarget = COLLISION;
+                fillRect(p.x, p.y-viewY, p.x+p.width, p.y+10-viewY, 1);
+            }   
         });
 
         renderTarget = SCREEN;
@@ -52,15 +65,11 @@ states.proto = {
     },
 
     updatePlayer: function() {
-        //console.log(Key._pressed)
-        
+        //debugger;
         var p0 = players[0];
         var p1 = players[1];
 
-        if(Key.isDown(Key.i)){
-            console.log(p0);
-        }
-        console.log(p0)
+        
         // player 0--------------------------- 
         p0.oldX = p0.x;
         p0.oldY = p0.y;
@@ -76,7 +85,12 @@ states.proto = {
         //collision resolution here
         p0.y += dy;
         //collision y resolution here
+        if(p0.yvel > 0){
+            // cx = 
+            // if(ram[COLLISION + p ])
+        }
 
+        //----key input handling
         if(p0.yvel > 0){
             p0.jumping = false;
         }
@@ -88,27 +102,25 @@ states.proto = {
             p0.facingLeft = true;
             p0.xvel =  - p0.xSpeed;
           }
-          if(Key.isDown(Key.w)){
+          if(Key.isDown(Key.w) ||  Key.isDown(Key.SPACE)){
             if(!p0.jumping){
               p0.jumping = true;
               p0.yvel = -p0.ySpeed;
             }
-          }
-        // player 1 keyboard input handling---------- 
+          } 
+        //----- gamepad input handling
         
-        
-        // gamepad input handling
-        
-            //have to check, will bail if doesn't exist.
-            // if(gp0){
-            //     //console.log(gp0.axes[1]);
-            //     if(Math.abs(gp0.axes[0]) > .1){
-            //         p0.xVelocity += gp0.axes[0] * p0.ySpeed;   
-            //     }
-            //     if(gp0.buttons[11]){
-            //         p0.yVelocity = -jumpVelocity;
-            //     }
-            // }
+            if(gp0){
+                if(Math.abs(gp0.axes[0]) > .1){
+                    p0.xvel += gp0.axes[0] * p0.maxXvel;   
+                }
+                if(gp0.buttons[11].pressed){
+                    if(!p0.jumping){
+                        p0.jumping = true;
+                        p0.yvel = -p0.ySpeed;
+                      }
+                }  
+            }
             
 
     },
