@@ -100,19 +100,19 @@ init = () => {
   difficulties = [ 
     { 
       level:"low", 
-      platformMaxSize: WIDTH/2, 
-      platformMinSize: 50,
+      platformMaxSize:WIDTH/6, 
+      platformMinSize: 20,
     }, 
     { 
       level:"medium", 
-      platformMaxSize: WIDTH/4,  
-      platformMinSize: 25,
+      platformMaxSize: WIDTH/8, 
+      platformMinSize: 15,
     }, 
     { 
       level:"high", 
-      platformMaxSize:WIDTH/6, 
-      platformMinSize: 20,
-    } 
+      platformMaxSize: WIDTH/10,  
+      platformMinSize: 10,
+    }
   ] 
  
   difficulty = difficulties[2]; 
