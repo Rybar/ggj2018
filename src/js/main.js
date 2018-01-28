@@ -8,6 +8,10 @@ init = () => {
   stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild( stats.dom );
 
+  //------ART---------------
+  spritesheet = new Image();
+  spritesheet.src = "sprites.png";
+
   //----------SOUND-------------------------
   audioCtx = new AudioContext;
   audioMaster = audioCtx.createGain();
@@ -21,6 +25,7 @@ init = () => {
       'jump.mp3',
       'land.mp3'
     ],
+
     nameAudioBuffers
     );
 
@@ -123,6 +128,7 @@ init = () => {
   difficulty = difficulties[2]; 
 
   platforms = [];
+  pickups = [];
   backgroundOrbs = [];
 
   platformColors = [3,19, 35]
@@ -140,7 +146,6 @@ init = () => {
     platforms.push(platform1)
     platforms.push(platform2)
   }
-
   for(let i= -100; i < 100; i++){
     backgroundOrbs.push({
       x: Math.random()*WIDTH/2,
@@ -150,9 +155,16 @@ init = () => {
       color: 29
     })
   }
-
-
-  //FLAGS--------------------------------------------------------------
+//----------fill pickups-----------------
+platforms.forEach(function(e,i,arr){
+  let px = e.x
+  let py = e.y-10;
+  pickups.push({
+    x: px, y: py, height: 10, width: 10
+  })
+})
+  
+//FLAGS--------------------------------------------------------------
   paused = false;
 
    loop();
@@ -245,6 +257,6 @@ nameAudioBuffers =(list)=>{
   sounds.jump = list[2]
   sounds.land = list[3]
   soundsReady = true;
-},
+}
 
 //----- END main.js---------------

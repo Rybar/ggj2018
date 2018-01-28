@@ -1,13 +1,9 @@
 states.proto = {
 
     step: function(dt) {
-        
-
         //game update
         platforms.forEach( function(p, index, arr){
-
         });
-        
         this.updatePlayer()
 
         gameClock = (gameDuration - Math.floor(t/100)).pad(2);
@@ -17,7 +13,6 @@ states.proto = {
 
         this.updateFill();      
     },
-
 
     render: function(dt) {
         
@@ -60,8 +55,13 @@ states.proto = {
                 renderTarget = BUFFER;
                 pat = dither[0];
                 fillRect(p.x, p.y-viewY, p.x2, p.y2-viewY, p.color, p.color-1); 
-                renderTarget = COLLISION;
-                fillRect(p.x, p.y-viewY, p.x2, p.y2-viewY, p.color); 
+            }   
+        });
+
+        pickups.forEach( function(p){
+            if(p.y - viewY < HEIGHT && p.y - viewY > 0){
+                renderTarget = BUFFER;
+                fillRect(p.x, p.y-viewY, p.x+p.width, p.y+p.height-viewY, 22); 
             }   
         });
         
