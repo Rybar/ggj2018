@@ -97,7 +97,7 @@ states.proto = {
             // cx = 
             // if(ram[COLLISION + p ])
             platforms.some(function(e){
-                if(p0.oldY + 17 <= e.y && p0.y + 17 >= e.y && p0.x + 16 > e.x && p0.x < (e.width + e.x))
+                if(p0.oldY + 17 <= e.y && p0.y + 17 >= e.y && p0.x + 16 > e.x && p0.x < e.x2)
                 {
                     p0.yvel = 0;
                     p0.y = e.y - 17;
