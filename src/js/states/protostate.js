@@ -16,6 +16,9 @@ states.proto = {
         });
 
         this.updatePlayer();
+
+        
+        
     },
 
 
@@ -125,8 +128,7 @@ states.proto = {
           }
           p0.x.clamp(p0,0,(WIDTH/2) - 16);
           if(Key.isDown(Key.w) || Key.isDown(Key.SPACE)){
-            // if(!p0.jumping){ // this gives you one free jump after falling off a platform
-            if(0 === p0.yvel && !p0.jumping){
+            if(!p0.jumping){
               p0.jumping = true;
               p0.yvel = -p0.ySpeed;
             }
@@ -144,7 +146,8 @@ states.proto = {
                       }
                 }  
             }
-            
+        
+         
 
     },
 
