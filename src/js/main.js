@@ -42,7 +42,7 @@ init = () => {
   t = 0;
 
   fill_y = HEIGHT,
-  filling = 0,
+  filling = false,
   time_left = 0,
   duration = 180,
   fillColor = 3,
@@ -52,6 +52,9 @@ init = () => {
   next_duration = 180,
   platformInterval = 100;
   platformSpeed = .6;
+  gameDuration = 30;
+  gameClock = ""
+  gameClockColor= 9;
 
   //---playerVars----------
   playerSpeed = 2;
@@ -78,7 +81,8 @@ init = () => {
     facingLeft: false,
     jumping: false,
     jumpCooldown: 0,
-    score: 0
+    score: 0,
+    jumpPressed: false
   },
 
   {
@@ -99,25 +103,26 @@ init = () => {
     facingLeft: false,
     jumping: false,
     jumpCooldown: 0,
-    score: 0
+    score: 0,
+    jumpPressed: false
   } ]
 
   difficulties = [ 
     { 
       level:"low", 
-      platformMaxSize: WIDTH/2, 
-      platformMinSize: 50,
+      platformMaxSize:WIDTH/6, 
+      platformMinSize: 20,
     }, 
     { 
       level:"medium", 
-      platformMaxSize: WIDTH/4,  
-      platformMinSize: 25,
+      platformMaxSize: WIDTH/8, 
+      platformMinSize: 15,
     }, 
     { 
       level:"high", 
-      platformMaxSize:WIDTH/6, 
-      platformMinSize: 20,
-    } 
+      platformMaxSize: WIDTH/10,  
+      platformMinSize: 10,
+    }
   ] 
  
   difficulty = difficulties[2]; 
@@ -125,8 +130,11 @@ init = () => {
   platforms = [];
   pickups = [];
   backgroundOrbs = [];
-  //--------------fill platforms------------
-  platformColors = [3,19,35]
+
+  platformColors = [3,19, 35]
+    platforms.push({
+    x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22 
+  })
   for(let i= 2; i > -200; i--){
     let color1 = Math.floor(Math.random() * Math.floor(3));
     let color2 = Math.floor(Math.random() * Math.floor(3));

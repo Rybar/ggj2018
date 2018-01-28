@@ -8,7 +8,7 @@ states.loading = {
 
     step: function(dt) {
       if(soundsReady && Key.isDown(Key.SPACE)){
-        playSound(sounds.song, 1, 0, .5, true);
+        playSound(sounds.song, 1, 0, .15, true);
         state = 'proto'
       
       }

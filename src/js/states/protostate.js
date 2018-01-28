@@ -5,9 +5,21 @@ states.proto = {
         platforms.forEach( function(p, index, arr){
         });
         this.updatePlayer()
+
+        gameClock = (gameDuration - Math.floor(t/100)).pad(2);
+        if(gameClock < 10){
+           gameClockColor = gameClock%2==0?9:4
+        }
+        this.updateFill();      
     },
 
     render: function(dt) {
+
+        fillRect(0, 0, WIDTH, fill_y, platformColors[fillColor], platformColors[fillColor]);
+        if(true === filling)
+        {
+          fillRect(0, fill_y + 1, WIDTH, HEIGHT, platformColors[prevFillColor], platformColors[prevFillColor]);
+        }    
         
         viewY = players[0].y - HEIGHT/2;
         this.drawThings(0);
@@ -19,7 +31,7 @@ states.proto = {
         this.drawPlayer(1);
         text([players[1].score.pad(3), WIDTH, 0, 3, 2,  'right', 'top', 3, 9]);
 
-        renderTarget = SCREEN;
+        text([gameClock, WIDTH/2, 0, 3, 2,  'center', 'top', 3, gameClockColor]);
     },
 
     drawThings: function(side) {
@@ -70,6 +82,9 @@ states.proto = {
         var p0 = players[0];
         var p1 = players[1];
 
+        p0.score = Math.abs(Math.floor(p0.y/platformInterval) - 2);
+        p1.score = Math.abs(Math.floor(p1.y/platformInterval) - 2);
+
         
         // player 0---------------------------
         this.init_player(0);
@@ -99,8 +114,12 @@ states.proto = {
         if (Key.isDown(Key.a)){
             this.move_left(0);
         }
-        if(Key.isDown(Key.w) || Key.isDown(Key.SPACE)){
+        if(Key.isDown(Key.w)){
             this.jump(0);
+        }
+        else
+        {
+            p0.jumpPressed = false;
         } 
 
         if (Key.isDown(Key.l)) {
@@ -109,8 +128,12 @@ states.proto = {
         if (Key.isDown(Key.j)){
             this.move_left(1);
         }
-        if(Key.isDown(Key.i) || Key.isDown(Key.SEMICOLON)){
+        if(Key.isDown(Key.i)){
             this.jump(1);
+        }
+        else
+        {
+            p1.jumpPressed = false;
         } 
 
         //----- gamepad input handling
@@ -129,7 +152,11 @@ states.proto = {
             }
             if(gp0.buttons[11].pressed){
                 this.jump(0);
-            }  
+            } 
+            else
+            {
+                p0.jumpPressed = false;
+            } 
         }
 
         if(gp1){
@@ -146,7 +173,11 @@ states.proto = {
             }
             if(gp1.buttons[11].pressed){
                 this.jump(1);
-            }  
+            } 
+            else
+            {
+                p1.jumpPressed = false;
+            } 
         }
     },
 
@@ -163,6 +194,10 @@ states.proto = {
             platforms.some(function(e){
                 if(p.oldY + 17 <= e.y && p.y + 17 >= e.y && xVal + 16 > e.x && xVal < e.x2)
                 {
+                    if(p.yvel > p.gravity)
+                    {
+                    	playSound(sounds.land, 1, 0, .10, false);
+                    }
                     p.yvel = 0;
                     p.y = e.y - 17;
                     p.jumping = false;
@@ -199,12 +234,16 @@ states.proto = {
     jump: function(player){
         let p = players[player];
 
-        // if(!p0.jumping){ // this gives you one free jump after falling off a platform
-        if(0 === p.yvel && !p.jumping){
-            p.jumping = true;
-            p.yvel = -p.ySpeed;
-            playSound(sounds.jump, 1, 0, .5, false);
+        if (!p.jumpPressed) {
+            // if(!p0.jumping){ // this gives you one free jump after falling off a platform
+            if(0 === p.yvel && !p.jumping){
+                p.jumping = true;
+                p.yvel = -p.ySpeed;
+                playSound(sounds.jump, 1, 0, .10, false);
+            }
         }
+
+        p.jumpPressed = true;
     },
 
     init_player: function(player){
@@ -216,5 +255,35 @@ states.proto = {
         p.yvel += p.gravity;
         p.yvel = p.yvel.clamp(p.minYvel, p.maxYvel);
         p.xvel = p.xvel.clamp(p.minXvel, p.maxXvel);        
+    },
+
+    updateFill: function(){
+
+        if(per_time(five_div))
+        {
+          time_left = duration;
+          filling = true;
+          prevFillColor = fillColor;
+          ++fillColor;
+          if(3 == fillColor)
+          {
+            fillColor = 0;
+          }
+        }
+    
+        if(true === filling)
+        {
+          fill_y = (duration - time_left) * HEIGHT / duration;
+          --time_left;
+          if(0 >= time_left)
+          {
+            filling = false;
+            fill_y = HEIGHT;
+          }
+        }
+        else if(duration != next_duration)
+        {
+          duration = next_duration;
+        }    
     }
 };
