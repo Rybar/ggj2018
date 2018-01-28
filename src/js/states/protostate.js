@@ -5,24 +5,7 @@ states.proto = {
 
         //game update
         platforms.forEach( function(p, index, arr){
-            pat = dither[0];
-            playerMax = players[0].y < players[1].y ? players[0].y : players[1].y;
-            // maxView = p1View > p2View ? p1View : p2View;
-            let threshold = arr[arr.length-4].y;
 
-            if(playerMax < threshold){  // we're almost out of platforms
-                //arr.splice(index, 2) // Remove platform
-                let color1 = Math.floor(Math.random() * 3);
-                let color2 = Math.floor(Math.random() * 3);
-                while(color1 == color2){
-                    color2 = Math.floor(Math.random() * 3);
-                }
-                var platform1 = generatePlatform(arr[arr.length-1].y - platformInterval, difficulty, platformColors[color1],0) //create new platform
-                var platform2 = generatePlatform(arr[arr.length-1].y - platformInterval, difficulty, platformColors[color2],0) //create new platform
-                arr.push(platform1)  //Add new platform
-                arr.push(platform2)  //Add new platform
-                arr.shift();
-            }
         });
         
         this.updatePlayer()
@@ -36,11 +19,14 @@ states.proto = {
         viewY = players[0].y - HEIGHT/2;
         this.drawThings(0);
         this.drawPlayer(0);
+        text([players[0].score.pad(3), 0, 0, 3, 2,  'left', 'top', 3, 9]);
 
         viewY = players[1].y - HEIGHT/2;
         this.drawThings(1);
         this.drawPlayer(1);
+        text([players[1].score.pad(3), WIDTH, 0, 3, 2,  'right', 'top', 3, 9]);
 
+        renderTarget = SCREEN;
     },
 
     drawThings: function(side) {
