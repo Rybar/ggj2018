@@ -24,7 +24,7 @@ init = () => {
     nameAudioBuffers
     );
 
-    // bufferLoader.load();
+    bufferLoader.load();
   
   //---------INIT VARS.  MOAR GLOBALS--------
   lcg = new LCG(1019);
