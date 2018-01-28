@@ -71,6 +71,9 @@ states.proto = {
         var p0 = players[0];
         var p1 = players[1];
 
+        p0.score = Math.abs(Math.floor(p0.y/platformInterval) - 2);
+        p1.score = Math.abs(Math.floor(p1.y/platformInterval) - 2);
+
         
         // player 0---------------------------
         this.init_player(0);
