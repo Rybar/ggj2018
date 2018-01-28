@@ -16,6 +16,7 @@ states.loading = {
 
     render: function(dt) {
       renderTarget = SCREEN; clear(0);
+      renderTarget = BUFFER; clear(0);
       if(soundsReady = true){
         text([
           "READY",
@@ -28,6 +29,20 @@ states.loading = {
           3,
           9,
         ]);
+        text([
+          "HIT SPACE TO PLAY",
+          WIDTH/2,
+          160 + Math.sin(t/60) * 20,
+          2,
+          2,
+          'center',
+          'top',
+          2,
+          9,
+        ]);
+        outline(BUFFER, SCREEN, 6,9,6,3);
+        renderTarget = SCREEN;
+        renderSource = BUFFER;
       }
       else{
         text([

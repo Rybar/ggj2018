@@ -12,6 +12,7 @@ init = () => {
   audioCtx = new AudioContext;
   audioMaster = audioCtx.createGain();
   audioMaster.connect(audioCtx.destination);
+
   bufferLoader = new BufferLoader(
     audioCtx,
     [
@@ -148,13 +149,12 @@ init = () => {
   //FLAGS--------------------------------------------------------------
   paused = false;
 
-  
- 
    loop();
 
 }
 
 //initialize  event listeners--------------------------
+
 window.addEventListener('keyup', function (event) {
   Key.onKeyup(event);
 }, false);
@@ -162,10 +162,14 @@ window.addEventListener('keydown', function (event) {
   Key.onKeydown(event);
 }, false);
 window.addEventListener('blur', function (event) {
-  paused = true;
+    muted = true;
+    audioMaster.gain.value = 0;
+    paused = true;
 }, false);
 window.addEventListener('focus', function (event) {
-  paused = false;
+    muted = false;
+    audioMaster.gain.value = 1;
+    paused = false;
 }, false);
 window.addEventListener("gamepadconnected", function(e) {
   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
@@ -180,7 +184,7 @@ loop = e => {
   gp1 = gamepads[1];
 
   if(paused){
-
+    audioMaster
     text([
       'PAUSED',
       WIDTH/2,
