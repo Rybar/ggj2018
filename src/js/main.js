@@ -40,10 +40,10 @@ init = () => {
   filling = false,
   time_left = 0,
   duration = 180,
-  fillColor = 3,
-  prevFillColor = 5,
-  five_div = { division:5, next_div:0 },
-  thirty_div = { division:30, next_div:0 },
+  fillColor = 0,
+  prevFillColor = 2,
+  five_div = { division:300, next_div:0 },
+  thirty_div = { division:1800, next_div:0 },
   next_duration = 180,
   platformInterval = 100;
   platformSpeed = .6;
@@ -65,7 +65,7 @@ init = () => {
     y: 100,
     xvel: 0,
     yvel: 0,
-    xSpeed: 700,
+    xSpeed: 300,
     ySpeed: 600,
     drag: .8,
     gravity: 25,
@@ -87,7 +87,7 @@ init = () => {
     y: 100,
     xvel: 0,
     yvel: 0,
-    xSpeed: 700,
+    xSpeed: 300,
     ySpeed: 600,
     drag: .8,
     gravity: 25,
@@ -127,7 +127,7 @@ init = () => {
 
   platformColors = [3,19, 35]
     platforms.push({
-    x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22 
+    x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22, canCollide: [true, true]
   })
   for(let i= 2; i > -200; i--){
     let color1 = Math.floor(Math.random() * Math.floor(3));
@@ -233,7 +233,8 @@ generatePlatform = (yIndex,difficulty, color1, color2) =>{
     x2: centerPoint + platformWidth/2, 
     y2: yIndex + 5, 
     color: color1, 
-    color2: color2 
+    color2: color2,
+    canCollide: [true, true]
   } 
   return platform; 
 } 

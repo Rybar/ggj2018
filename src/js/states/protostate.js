@@ -14,17 +14,12 @@ states.proto = {
         if(gameClock < 10){
            gameClockColor = gameClock%2==0?9:4
         }
+
         this.updateFill();      
     },
 
 
     render: function(dt) {
-
-        fillRect(0, 0, WIDTH, fill_y, platformColors[fillColor], platformColors[fillColor]);
-        if(true === filling)
-        {
-          fillRect(0, fill_y + 1, WIDTH, HEIGHT, platformColors[prevFillColor], platformColors[prevFillColor]);
-        }    
         
         viewY = players[0].y - HEIGHT/2;
         this.drawThings(0);
@@ -36,7 +31,7 @@ states.proto = {
         this.drawPlayer(1);
         text([players[1].score.pad(3), WIDTH, 0, 3, 2,  'right', 'top', 3, 9]);
 
-        text([gameClock, WIDTH/2, 0, 3, 2,  'center', 'top', 3, gameClockColor]);
+        text([gameClock, WIDTH/2, 0, 3, 2,  'center', 'top', 3, gameClockColor]); 
     },
 
     drawThings: function(side) {
@@ -52,8 +47,13 @@ states.proto = {
                 pat = dither[orb.dither ]; //a dither between half and almost invisible
                 fillCircle(orb.x, orb.y-viewY, orb.r, orb.color);
             }
-            
         })
+
+        fillRect(0, 0, WIDTH, fill_y, platformColors[fillColor], platformColors[fillColor]);
+        if(true === filling)
+        {
+          fillRect(0, fill_y + 1, WIDTH, HEIGHT, platformColors[prevFillColor], platformColors[prevFillColor]);
+        }   
 
         platforms.forEach( function(p){
             if(p.y - viewY < HEIGHT && p.y - viewY > 0){
@@ -187,12 +187,12 @@ states.proto = {
         fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, 12,12);
     },
 
-    collision_detect: function(player){
+    collision_detect: function(player){        
         let p = players[player];
         if(p.yvel > 0){
             var xVal = (p.x < (WIDTH/2)) ? p.x : p.x - (WIDTH/2);
             platforms.some(function(e){
-                if(p.oldY + 17 <= e.y && p.y + 17 >= e.y && xVal + 16 > e.x && xVal < e.x2)
+                if(e.canCollide[player] && (p.oldY + 17 <= e.y && p.y + 17 >= e.y && xVal + 16 > e.x && xVal < e.x2))
                 {
                     if(p.yvel > p.gravity)
                     {
@@ -261,14 +261,14 @@ states.proto = {
 
         if(per_time(five_div))
         {
-          time_left = duration;
-          filling = true;
-          prevFillColor = fillColor;
-          ++fillColor;
-          if(3 == fillColor)
-          {
-            fillColor = 0;
-          }
+            time_left = duration;
+            filling = true;
+            prevFillColor = fillColor;
+            ++fillColor;
+            if(3 == fillColor)
+            {
+                fillColor = 0;
+            }
         }
     
         if(true === filling)
@@ -284,6 +284,18 @@ states.proto = {
         else if(duration != next_duration)
         {
           duration = next_duration;
-        }    
+        }
+
+        players.forEach(function(p, i){
+            platforms.forEach(function(e){
+                if(((e.y2 - p.y + HEIGHT/2) <= fill_y && e.color === platformColors[fillColor])
+                || ((e.y - p.y + HEIGHT/2) > fill_y && e.color === platformColors[prevFillColor])) {
+                    e.canCollide[i] = false;
+                }
+                else{
+                    e.canCollide[i] = true;
+                }
+            })
+        });
     }
 };
