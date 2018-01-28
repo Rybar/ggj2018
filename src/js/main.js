@@ -65,10 +65,10 @@ init = () => {
     ySpeed: 600,
     drag: .8,
     gravity: 25,
-    maxYvel: 150,
-    maxXvel: -300,
+    maxYvel: 250,
+    maxXvel: 250,
     minYvel: -700,
-    minXvel: -150,
+    minXvel: -250,
     facingLeft: false,
     jumping: false,
     jumpCooldown: 0

@@ -1016,6 +1016,7 @@ Key = {
     TWO: 50,
     THREE: 51,
     FOUR: 52,
+    SEMICOLON: 59,
     a: 65,
     c: 67,
     w: 87,
