@@ -37,7 +37,7 @@ init = () => {
   t = 0;
 
   fill_y = HEIGHT,
-  filling = 0,
+  filling = false,
   time_left = 0,
   duration = 180,
   fillColor = 3,

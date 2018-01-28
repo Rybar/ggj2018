@@ -14,10 +14,17 @@ states.proto = {
         if(gameClock < 10){
            gameClockColor = gameClock%2==0?9:4
         }
+        this.updateFill();      
     },
 
 
     render: function(dt) {
+
+        fillRect(0, 0, WIDTH, fill_y, platformColors[fillColor], platformColors[fillColor]);
+        if(true === filling)
+        {
+          fillRect(0, fill_y + 1, WIDTH, HEIGHT, platformColors[prevFillColor], platformColors[prevFillColor]);
+        }    
         
         viewY = players[0].y - HEIGHT/2;
         this.drawThings(0);
@@ -47,6 +54,7 @@ states.proto = {
             }
             
         })
+
         platforms.forEach( function(p){
             if(p.y - viewY < HEIGHT && p.y - viewY > 0){
                 renderTarget = BUFFER;
@@ -247,5 +255,35 @@ states.proto = {
         p.yvel += p.gravity;
         p.yvel = p.yvel.clamp(p.minYvel, p.maxYvel);
         p.xvel = p.xvel.clamp(p.minXvel, p.maxXvel);        
+    },
+
+    updateFill: function(){
+
+        if(per_time(five_div))
+        {
+          time_left = duration;
+          filling = true;
+          prevFillColor = fillColor;
+          ++fillColor;
+          if(3 == fillColor)
+          {
+            fillColor = 0;
+          }
+        }
+    
+        if(true === filling)
+        {
+          fill_y = (duration - time_left) * HEIGHT / duration;
+          --time_left;
+          if(0 >= time_left)
+          {
+            filling = false;
+            fill_y = HEIGHT;
+          }
+        }
+        else if(duration != next_duration)
+        {
+          duration = next_duration;
+        }    
     }
 };
