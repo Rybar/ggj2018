@@ -9,8 +9,11 @@ states.proto = {
         });
         
         this.updatePlayer()
-        
-        
+
+        gameClock = (gameDuration - Math.floor(t/100)).pad(2);
+        if(gameClock < 10){
+           gameClockColor = gameClock%2==0?9:4
+        }
     },
 
 
@@ -26,7 +29,7 @@ states.proto = {
         this.drawPlayer(1);
         text([players[1].score.pad(3), WIDTH, 0, 3, 2,  'right', 'top', 3, 9]);
 
-        renderTarget = SCREEN;
+        text([gameClock, WIDTH/2, 0, 3, 2,  'center', 'top', 3, gameClockColor]);
     },
 
     drawThings: function(side) {

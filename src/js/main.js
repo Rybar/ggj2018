@@ -24,7 +24,7 @@ init = () => {
     nameAudioBuffers
     );
 
-    bufferLoader.load();
+    // bufferLoader.load();
   
   //---------INIT VARS.  MOAR GLOBALS--------
   lcg = new LCG(1019);
@@ -47,6 +47,9 @@ init = () => {
   next_duration = 180,
   platformInterval = 100;
   platformSpeed = .6;
+  gameDuration = 30;
+  gameClock = ""
+  gameClockColor= 9;
 
   //---playerVars----------
   playerSpeed = 2;
