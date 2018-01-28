@@ -96,12 +96,18 @@ states.proto = {
         if(p0.yvel > 0){
             // cx = 
             // if(ram[COLLISION + p ])
+            platforms.some(function(e){
+                if(p0.oldY + 17 <= e.y && p0.y + 17 >= e.y && p0.x + 16 > e.x && p0.x < (e.width + e.x))
+                {
+                    p0.yvel = 0;
+                    p0.y = e.y - 17;
+                    p0.jumping = false;
+                    return true;
+                }
+            });
         }
 
-        //----key input handling
-        if(p0.yvel > 0){
-            p0.jumping = false;
-        }
+        // input
         if (Key.isDown(Key.d)) {
             p0.facingLeft = false;
             p0.xvel =  p0.xSpeed;
