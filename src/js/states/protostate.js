@@ -186,8 +186,10 @@ states.proto = {
             platforms.some(function(e){
                 if(p.oldY + 17 <= e.y && p.y + 17 >= e.y && xVal + 16 > e.x && xVal < e.x2)
                 {
-                    playSound(sounds.land, 1, 0, .10, false);
-
+                    if(p.yvel > p.gravity)
+                    {
+                    	playSound(sounds.land, 1, 0, .10, false);
+                    }
                     p.yvel = 0;
                     p.y = e.y - 17;
                     p.jumping = false;
