@@ -153,23 +153,29 @@ init = () => {
       level:"low", 
       platformMaxSize:WIDTH/6, 
       platformMinSize: 20,
-      multiplier: 0.01
+      multiplier: 0.01,
+      spaceMult: 8,
+      spaceDiv: WIDTH/12
     }, 
     { 
       level:"medium",   
       platformMaxSize: WIDTH/8, 
       platformMinSize: 15,
-      multiplier: 0.02
+      multiplier: 0.02,
+      spaceMult: 12,
+      spaceDiv: WIDTH/8
     }, 
     { 
       level:"high", 
       platformMaxSize: WIDTH/10,  
       platformMinSize: 10,
-      multiplier: 0.03
+      multiplier: 0.03,
+      spaceMult: 16,
+      spaceDiv: 3*WIDTH/20
     }
   ] 
  
-  difficulty = difficulties[0]; 
+  difficulty = difficulties[2]; 
 
   platforms = [];
   pickups = [];
@@ -185,10 +191,11 @@ init = () => {
     while(color1 == color2){
       color2 = Math.floor(Math.random() * Math.floor(3));
     }
-    var platform1 = generatePlatform(i*platformInterval,difficulty, platformColors[color1], 0, (i-2))
-    var platform2 = generatePlatform(i*platformInterval,difficulty, platformColors[color2], 0, (i-2))
-    platforms.push(platform1)
-    platforms.push(platform2)
+    this.generatePlatforms(i*platformInterval, difficulty, color1, color2, i-2);
+    // var platform1 = generatePlatform(i*platformInterval,difficulty, platformColors[color1], 0, (i-2))
+    // var platform2 = generatePlatform(i*platformInterval,difficulty, platformColors[color2], 0, (i-2))
+    // platforms.push(platform1)
+    // platforms.push(platform2)
   }
   for(let i= -100; i < 100; i++){
     backgroundOrbs.push({
@@ -295,6 +302,42 @@ generatePlatform = (yIndex,difficulty, color1, color2, index) =>{
     canCollide: [true, true]
   } 
   return platform; 
+} 
+
+generatePlatforms = (yIndex,difficulty, color1, color2, index) =>{ 
+  var distanceModifier = (index * difficulty.multiplier)*-1;
+  var maxPlatformSize = difficulty.platformMaxSize - distanceModifier;
+  var platformWidth1 = Math.floor(Math.random() * (maxPlatformSize-difficulty.platformMinSize)) + difficulty.platformMinSize;
+  var platformWidth2 = Math.floor(Math.random() * (maxPlatformSize-difficulty.platformMinSize)) + difficulty.platformMinSize;
+
+  var leftOver = WIDTH/2 - platformWidth1 - platformWidth2;
+  var lowerBounds = leftOver / 4;
+  var upperBounds = leftOver / 2;
+  var s = Math.floor(Math.random() * upperBounds);
+  var d = Math.floor(Math.random() * upperBounds-lowerBounds) + lowerBounds;
+
+  var platform1 = { 
+    x: s, 
+    y: yIndex, 
+    x2: s + platformWidth1, 
+    y2: yIndex + 5, 
+    color: platformColors[color1], 
+    color2: 0,
+    canCollide: [true, true]
+  };
+
+  var platform2 = {
+    x: s + platformWidth1 + d, 
+    y: yIndex, 
+    x2: s + platformWidth1 + d + platformWidth2, 
+    y2: yIndex + 5, 
+    color: platformColors[color2], 
+    color2: 0,
+    canCollide: [true, true]
+  };
+
+  platforms.push(platform1);
+  platforms.push(platform2);
 } 
 
 nameAudioBuffers =(list)=>{
