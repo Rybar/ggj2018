@@ -37,7 +37,6 @@ states.proto = {
         this.drawThings(0);
         this.drawPlayer(0);
 
-
         viewY = players[1].y - HEIGHT/2;
         this.drawThings(1);
         this.drawPlayer(1);
@@ -219,6 +218,7 @@ states.proto = {
         if(0 === p.yvel && !p.jumping){
             p.jumping = true;
             p.yvel = -p.ySpeed;
+            playSound(sounds.jump, 1, 0, .5, false);
         }
     },
 

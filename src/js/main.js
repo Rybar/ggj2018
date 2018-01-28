@@ -8,17 +8,33 @@ init = () => {
   stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild( stats.dom );
 
-  lcg = new LCG(1019);
+  //----------SOUND-------------------------
+  audioCtx = new AudioContext;
+  audioMaster = audioCtx.createGain();
+  audioMaster.connect(audioCtx.destination);
+  bufferLoader = new BufferLoader(
+    audioCtx,
+    [
+      'level.mp3',
+      'death.mp3',
+      'jump.mp3',
+      'land.mp3'
+    ],
+    nameAudioBuffers
+    );
 
+    bufferLoader.load();
+  
+  //---------INIT VARS.  MOAR GLOBALS--------
+  lcg = new LCG(1019);
+  soundsReady = false;
   sounds = {};
-  soundsLoaded = 0;
-  totalSounds = 8;
   score = 0;
   last = 0;
   dt = 0;
   now = 0;
   t = 0;
-  bx = 0,
+
   fill_y = HEIGHT,
   filling = 0,
   time_left = 0,
@@ -36,7 +52,7 @@ init = () => {
   gravity = 8;
   drag = .8;
   jumpVelocity = 4;
-  state = 'proto';
+  state = 'loading';
 
   players = [{
     x: WIDTH/4,
@@ -132,10 +148,7 @@ init = () => {
   //FLAGS--------------------------------------------------------------
   paused = false;
 
-  //sound flags--------------------------------------------------------
   
-
-  audioCtx = new AudioContext;
  
    loop();
 
@@ -183,9 +196,6 @@ loop = e => {
 
   }else {
     pal = palDefault;
-    //game timer
-    //let now = new Date().getTime();
-    //dt = Math.min(1, (now - last) / 1000);
     t += 1;
 
     states[state].step(dt);
@@ -217,5 +227,13 @@ generatePlatform = (yIndex,difficulty, color1, color2) =>{
   } 
   return platform; 
 } 
+
+nameAudioBuffers =(list)=>{
+  sounds.song = list[0]
+  sounds.death = list[1]
+  sounds.jump = list[2]
+  sounds.land = list[3]
+  soundsReady = true;
+},
 
 //----- END main.js---------------

@@ -28,9 +28,9 @@ function sin(x) {
   return Math.sin(-x*6.28318531);
 }
 
-audioCtx = new AudioContext;
-audioMaster = audioCtx.createGain();
-audioMaster.connect(audioCtx.destination);
+// audioCtx = new AudioContext;
+// audioMaster = audioCtx.createGain();
+// audioMaster.connect(audioCtx.destination);
 
 //relative drawing position and pencolor, for drawing functions that require it.
 
