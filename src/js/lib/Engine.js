@@ -15,9 +15,7 @@ const COLLISION = PAGESIZE*6;
 const SPRITES = PAGESIZE*7;
 const UI = PAGESIZE*8;
 
-
 S=Math.sin;
-
 C=Math.cos;
 
 function cos(x) { // x = 0 - 1
@@ -584,7 +582,7 @@ ram =             new Uint8Array(WIDTH * HEIGHT * PAGES);
         if(y+i < HEIGHT && x+j < WIDTH && y+i > -1 && x+j > -1){
           if(flipx & flipy){
 
-            if(ram[(renderSource + ( ( sy + (sh-i) )*WIDTH+sx+(sw-j)))] >= 0) {
+            if(ram[(renderSource + ( ( sy + (sh-i) )*WIDTH+sx+(sw-j)))] > 0) {
 
               ram[ (renderTarget + ((y+i)*WIDTH+x+j)) ] = palette[ ram[(renderSource + ((sy+(sh-i-1))*WIDTH+sx+(sw-j-1)))] ];
 
@@ -593,7 +591,7 @@ ram =             new Uint8Array(WIDTH * HEIGHT * PAGES);
           }
           else if(flipy && !flipx){
 
-            if(ram[(renderSource + ( ( sy + (sh-i) )*WIDTH+sx+j))] >= 0) {
+            if(ram[(renderSource + ( ( sy + (sh-i) )*WIDTH+sx+j))] > 0) {
 
               ram[ (renderTarget + ((y+i)*WIDTH+x+j)) ] = palette[ ram[(renderSource + ((sy+(sh-i-1))*WIDTH+sx+j))] ];
 
@@ -602,7 +600,7 @@ ram =             new Uint8Array(WIDTH * HEIGHT * PAGES);
           }
           else if(flipx && !flipy){
 
-            if(ram[(renderSource + ((sy+i)*WIDTH+sx+(sw-j-1)))] >= 0) {
+            if(ram[(renderSource + ((sy+i)*WIDTH+sx+(sw-j-1)))] > 0) {
 
               ram[ (renderTarget + ((y+i)*WIDTH+x+j)) ] = palette[ ram[(renderSource + ((sy+i)*WIDTH+sx+(sw-j-1)))] ];
 
@@ -611,7 +609,7 @@ ram =             new Uint8Array(WIDTH * HEIGHT * PAGES);
           }
           else if(!flipx && !flipy){
 
-            if(ram[(renderSource + ((sy+i)*WIDTH+sx+j))] >= 0) {
+            if(ram[(renderSource + ((sy+i)*WIDTH+sx+j))] > 0) {
 
               ram[ (renderTarget + ((y+i)*WIDTH+x+j)) ] = palette [ ram[(renderSource + ((sy+i)*WIDTH+sx+j))] ] ;
 
