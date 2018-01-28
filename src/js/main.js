@@ -28,7 +28,7 @@ init = () => {
   five_div = { division:5, next_div:0 },
   thirty_div = { division:30, next_div:0 },
   next_duration = 180,
-  platformInterval = 40;
+  platformInterval = 100;
   platformSpeed = .6;
 
   //---playerVars----------
