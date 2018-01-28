@@ -99,17 +99,20 @@ init = () => {
 
   platformColors = [3,19, 35]
   
-  for(let i= HEIGHT; i > -500; i-=platformInterval){
+  for(let i= 10; i > -100; i--){
     let color1 = Math.floor(Math.random() * Math.floor(3));
     let color2 = Math.floor(Math.random() * Math.floor(3));
     while(color1 == color2){
       color2 = Math.floor(Math.random() * Math.floor(3));
     }
-    var platform1 = generatePlatform(i,difficulty, platformColors[color1], 0)
-    var platform2 = generatePlatform(i,difficulty, platformColors[color2], 0)
+    var platform1 = generatePlatform(i*platformInterval,difficulty, platformColors[color1], 0)
+    var platform2 = generatePlatform(i*platformInterval,difficulty, platformColors[color2], 0)
     platforms.push(platform1)
     platforms.push(platform2)
   }
+  platforms.push({
+    x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22 
+  })
 
   for(let i= -100; i < 100; i++){
     backgroundOrbs.push({

@@ -6,22 +6,26 @@ states.proto = {
         //game update
         platforms.forEach( function(p, index, arr){
             pat = dither[0];
-            if(p.y - viewY > HEIGHT + 200){  // Off the screen
-                arr.splice(index, 2) // Remove platform
-                let color1 = Math.floor(Math.random() * Math.floor(3));
-                let color2 = Math.floor(Math.random() * Math.floor(3));
+            playerMax = players[0].y < players[1].y ? players[0].y : players[1].y;
+            // maxView = p1View > p2View ? p1View : p2View;
+            let threshold = arr[arr.length-4].y;
+
+            if(playerMax < threshold){  // we're almost out of platforms
+                //arr.splice(index, 2) // Remove platform
+                let color1 = Math.floor(Math.random() * 3);
+                let color2 = Math.floor(Math.random() * 3);
                 while(color1 == color2){
-                    color2 = Math.floor(Math.random() * Math.floor(3));
+                    color2 = Math.floor(Math.random() * 3);
                 }
-                var platform1 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, platformColors[color1],0) //create new platform
-                var platform2 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, platformColors[color2],0) //create new platform
+                var platform1 = generatePlatform(arr[arr.length-1].y - platformInterval, difficulty, platformColors[color1],0) //create new platform
+                var platform2 = generatePlatform(arr[arr.length-1].y - platformInterval, difficulty, platformColors[color2],0) //create new platform
                 arr.push(platform1)  //Add new platform
                 arr.push(platform2)  //Add new platform
+                arr.shift();
             }
         });
-
-        this.updatePlayer();
-
+        
+        this.updatePlayer()
         
         
     },
@@ -127,12 +131,13 @@ states.proto = {
         //----- gamepad input handling
         
         if(gp0){
-            if(Math.abs(gp0.axes[0]) > .1){
-                if(gp0.axes[0] < 0)
+            let deadzone = .4
+            if(Math.abs(gp0.axes[0]) > deadzone){
+                if(gp0.axes[0] < -deadzone)
                 {
                     this.move_left(0);
                 }
-                if(gp0.axes[0] > 0)
+                if(gp0.axes[0] > deadzone)
                 {
                     this.move_right(0);
                 }
@@ -143,12 +148,13 @@ states.proto = {
         }
 
         if(gp1){
-            if(Math.abs(gp1.axes[0]) > .1){
-                if(gp1.axes[0] < 0)
+            let deadzone = .4
+            if(Math.abs(gp1.axes[0]) > deadzone){
+                if(gp1.axes[0] < -deadzone)
                 {
                     this.move_left(1);
                 }
-                if(gp1.axes[0] > 0)
+                if(gp1.axes[0] > deadzone)
                 {
                     this.move_right(1);
                 }
