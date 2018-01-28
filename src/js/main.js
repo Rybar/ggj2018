@@ -40,6 +40,8 @@ init = () => {
 
   players = [{
     x: WIDTH/4,
+    xMin:0,
+    xMax: WIDTH/2 - 17,
     y: 100,
     xvel: 0,
     yvel: 0,
@@ -58,6 +60,8 @@ init = () => {
 
   {
     x: (WIDTH/4)*3,
+    xMin: WIDTH/2,
+    xMax: WIDTH - 17,
     y: 100,
     xvel: 0,
     yvel: 0,
@@ -203,7 +207,6 @@ generatePlatform = (yIndex,difficulty, color1, color2) =>{
   var lowerBounds = platformWidth/2;
   var upperBounds = (WIDTH/2) - (platformWidth/2)
   var centerPoint =Math.floor(Math.random() * upperBounds-lowerBounds) + lowerBounds
-  console.log('width:'+ platformWidth)
   var platform = { 
     x: centerPoint - platformWidth/2, 
     y: yIndex, 

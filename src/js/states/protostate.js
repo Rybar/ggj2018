@@ -97,12 +97,13 @@ states.proto = {
         let dx1 = 1/60 * p1.xvel;
         let dy1 = 1/60 * p1.yvel;
 
-        p0.x += dx0;
+        p0.x = (p0.x + dx0).clamp(p0.xMin, p0.xMax);
         p0.y += dy0;
 
-        p1.x += dx1;
+        p1.x = (p1.x + dx1).clamp(p1.xMin, p1.xMax);
         p1.y += dy1;
 
+        
         this.collision_detect(0);
         this.collision_detect(1);
         //collision y resolution here
@@ -163,15 +164,11 @@ states.proto = {
                 this.jump(1);
             }  
         }
-        
-
-        p0.x.clamp(p0,0,(WIDTH/2) - 16);
-        p1.x.clamp(p1, WIDTH / 2, WIDTH - 16);        
     },
 
     drawPlayer: function(player) {
         let p = players[player];
-        renderTarget = SCREEN; 
+        renderTarget = SCREEN;
         fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, 12,12);
     },
 
@@ -200,6 +197,7 @@ states.proto = {
         {
             p.xvel = 0;
         }
+        p.x = p.x.clamp(p.xMin, p.xMax);
     },
 
     move_left: function(player){
@@ -211,6 +209,7 @@ states.proto = {
         {
             p.xvel = 0;
         }    
+        p.x = p.x.clamp(p.xMin, p.xMax);
     },
 
     jump: function(player){
