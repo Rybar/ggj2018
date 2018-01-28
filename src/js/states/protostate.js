@@ -153,7 +153,7 @@ states.proto = {
     drawPlayer: function(player) {
         let p = players[player];
         renderTarget = SCREEN; 
-        fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, Math.random()*63, Math.random()*63);
+        fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, 12,12);
     }
 
 };
