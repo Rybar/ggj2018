@@ -12,6 +12,7 @@ init = () => {
   audioCtx = new AudioContext;
   audioMaster = audioCtx.createGain();
   audioMaster.connect(audioCtx.destination);
+
   bufferLoader = new BufferLoader(
     audioCtx,
     [
@@ -101,19 +102,19 @@ init = () => {
   difficulties = [ 
     { 
       level:"low", 
-      platformMaxSize: WIDTH/2, 
-      platformMinSize: 50,
+      platformMaxSize:WIDTH/6, 
+      platformMinSize: 20,
     }, 
     { 
       level:"medium", 
-      platformMaxSize: WIDTH/4,  
-      platformMinSize: 25,
+      platformMaxSize: WIDTH/8, 
+      platformMinSize: 15,
     }, 
     { 
       level:"high", 
-      platformMaxSize:WIDTH/6, 
-      platformMinSize: 20,
-    } 
+      platformMaxSize: WIDTH/10,  
+      platformMinSize: 10,
+    }
   ] 
  
   difficulty = difficulties[2]; 
@@ -122,7 +123,9 @@ init = () => {
   backgroundOrbs = [];
 
   platformColors = [3,19, 35]
-  
+    platforms.push({
+    x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22 
+  })
   for(let i= 2; i > -200; i--){
     let color1 = Math.floor(Math.random() * Math.floor(3));
     let color2 = Math.floor(Math.random() * Math.floor(3));
@@ -134,9 +137,6 @@ init = () => {
     platforms.push(platform1)
     platforms.push(platform2)
   }
-  platforms.push({
-    x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22 
-  })
 
   for(let i= -100; i < 100; i++){
     backgroundOrbs.push({
@@ -152,13 +152,12 @@ init = () => {
   //FLAGS--------------------------------------------------------------
   paused = false;
 
-  
- 
    loop();
 
 }
 
 //initialize  event listeners--------------------------
+
 window.addEventListener('keyup', function (event) {
   Key.onKeyup(event);
 }, false);
@@ -166,10 +165,14 @@ window.addEventListener('keydown', function (event) {
   Key.onKeydown(event);
 }, false);
 window.addEventListener('blur', function (event) {
-  paused = true;
+    muted = true;
+    audioMaster.gain.value = 0;
+    paused = true;
 }, false);
 window.addEventListener('focus', function (event) {
-  paused = false;
+    muted = false;
+    audioMaster.gain.value = 1;
+    paused = false;
 }, false);
 window.addEventListener("gamepadconnected", function(e) {
   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
@@ -184,7 +187,7 @@ loop = e => {
   gp1 = gamepads[1];
 
   if(paused){
-
+    audioMaster
     text([
       'PAUSED',
       WIDTH/2,
