@@ -52,6 +52,7 @@ init = () => {
   next_duration = 180,
   platformInterval = 100;
   platformSpeed = .6;
+  gameStartTime = undefined;
   gameDuration = 30;
   gameClock = ""
   gameClockColor= 9;
@@ -82,7 +83,9 @@ init = () => {
     jumping: false,
     jumpCooldown: 0,
     score: 0,
-    jumpPressed: false
+    jumpPressed: false,
+    status: "TIE",
+    statusColor: 4
   },
 
   {
@@ -104,7 +107,9 @@ init = () => {
     jumping: false,
     jumpCooldown: 0,
     score: 0,
-    jumpPressed: false
+    jumpPressed: false,
+    status: "TIE",
+    statusColor: 4
   } ]
 
   difficulties = [ 

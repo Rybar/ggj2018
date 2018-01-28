@@ -5,10 +5,14 @@ states.proto = {
         platforms.forEach( function(p, index, arr){
         });
         this.updatePlayer()
-
-        gameClock = (gameDuration - Math.floor(t/100)).pad(2);
-        if(gameClock < 10){
-           gameClockColor = gameClock%2==0?9:4
+        if(gameStartTime){
+            let timeSinceGameStart = Math.floor((t-gameStartTime)/100);
+            gameClock = (gameDuration - timeSinceGameStart).pad(2);
+            if(gameClock < 10){
+                gameClockColor = gameClock%2==1?9:4
+            }
+            if(gameClock === "00"){
+            }
         }
         this.updateFill();      
     },
@@ -32,6 +36,9 @@ states.proto = {
         text([players[1].score.pad(3), WIDTH, 0, 3, 2,  'right', 'top', 3, 9]);
 
         text([gameClock, WIDTH/2, 0, 3, 2,  'center', 'top', 3, gameClockColor]);
+        if(gameClock === "00"){
+            state = 'gameover'
+        }
     },
 
     drawThings: function(side) {
@@ -78,12 +85,29 @@ states.proto = {
     },
 
     updatePlayer: function() {
-        //debugger;
         var p0 = players[0];
         var p1 = players[1];
 
         p0.score = Math.abs(Math.floor(p0.y/platformInterval) - 2);
         p1.score = Math.abs(Math.floor(p1.y/platformInterval) - 2);
+
+        //Determine who's winning
+        if(p0.score > p1.score){
+            p0.status = "WINNER";
+            p0.statusColor = 13;
+            p1.status = "LOSER";
+            p1.statusColor = 4;
+        }else if(p0.score < p1.score){
+            p0.status = "LOSER";
+            p0.statusColor = 4;
+            p1.status = "WINNER";
+            p1.statusColor = 13;
+        } else {
+            p0.status = "TIE";
+            p0.statusColor = 4;
+            p1.status = "TIE";
+            p1.statusColor = 4;
+        }
 
         
         // player 0---------------------------
