@@ -14,7 +14,7 @@ states.proto = {
             if(gameClock === "00"){
             }
         }
-        this.updateFill();      
+        this.updateFill();
     },
 
     render: function(dt) {
@@ -68,7 +68,11 @@ states.proto = {
         pickups.forEach( function(p){
             if(p.y - viewY < HEIGHT && p.y - viewY > 0){
                 renderTarget = BUFFER;
-                fillRect(p.x, p.y-viewY, p.x+p.width, p.y+p.height-viewY, 22); 
+                renderSource = SPRITES;
+                let s = sprites.pickup;
+                spr(s.x+s.width * ( ( (t%40)/10 )|0 ), s.y, s.width, s.height, p.x, p.y-viewY );
+                //console.log( ( (t%40) / 4)|0 )
+                //fillRect(p.x, p.y-viewY, p.x+p.width, p.y+p.height-viewY, 22); 
             }   
         });
         
@@ -79,7 +83,8 @@ states.proto = {
         pat = dither[0]; //solid fill.
 
         //screen clear for HALF the screen
-        fillRect(startDrawX, HEIGHT, endDrawX,  HEIGHT, 30) 
+        fillRect(startDrawX, HEIGHT, endDrawX,  HEIGHT, 30)
+        renderSource = BUFFER; 
         spr(0,0,WIDTH/2,HEIGHT, side==0 ? 0 : WIDTH/2, 0)
 
     },
@@ -208,7 +213,10 @@ states.proto = {
     drawPlayer: function(player) {
         let p = players[player];
         renderTarget = SCREEN;
-        fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, 12,12);
+        //fillRect(p.x, p.y-viewY, p.x+16, p.y+16-viewY, 12,12);
+        renderSource = SPRITES;
+        let s = player == 0 ? sprites.player0 : sprites.player1
+        spr(s.x,s.y,s.width,s.height,p.x,p.y-viewY, !p.facingLeft)
     },
 
     collision_detect: function(player){

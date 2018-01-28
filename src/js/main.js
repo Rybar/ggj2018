@@ -11,6 +11,42 @@ init = () => {
   //------ART---------------
   spritesheet = new Image();
   spritesheet.src = "sprites.png";
+  spritesheet.onload = function(){
+    imageToRam(spritesheet, SPRITES);
+  }
+  sprites = {
+    player0: {
+      x: 0, y:0, width: 16, height: 16,
+      frames: 10,
+      animations: {
+        idle: [0],
+        walk: [6,7,8,9],
+        jump: [1,2,3,4,5],
+        land: [5,4,3,2,1,0],
+      }
+    },
+    player1: {
+      x: 0, y:52, width: 16, height: 16,
+      frames: 10,
+      animations: {
+        idle: [0],
+        walk: [6,7,8,9],
+        jump: [1,2,3,4,5],
+        land: [5,4,3,2,1,0],
+      }
+    },
+    ground: {
+      x: 0, y:16, width: 300, height: 10
+    },
+    pickup: {
+      x: 0, y:26, width: 10, height: 10,
+      frames: 4,
+      animations: {
+        idle: [0,1,2,3]
+      }
+    }
+      
+  },
 
   //----------SOUND-------------------------
   audioCtx = new AudioContext;
@@ -211,7 +247,7 @@ loop = e => {
   gp1 = gamepads[1];
 
   if(paused){
-    audioMaster
+    
     text([
       'PAUSED',
       WIDTH/2,
