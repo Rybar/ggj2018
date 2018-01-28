@@ -72,7 +72,8 @@ init = () => {
     facingLeft: false,
     jumping: false,
     jumpCooldown: 0,
-    score: 0
+    score: 0,
+    jumpPressed: false
   },
 
   {
@@ -93,7 +94,8 @@ init = () => {
     facingLeft: false,
     jumping: false,
     jumpCooldown: 0,
-    score: 0
+    score: 0,
+    jumpPressed: false
   } ]
 
   difficulties = [ 

@@ -100,8 +100,12 @@ states.proto = {
         if (Key.isDown(Key.a)){
             this.move_left(0);
         }
-        if(Key.isDown(Key.w) || Key.isDown(Key.SPACE)){
+        if(Key.isDown(Key.w)){
             this.jump(0);
+        }
+        else
+        {
+            p0.jumpPressed = false;
         } 
 
         if (Key.isDown(Key.l)) {
@@ -110,8 +114,12 @@ states.proto = {
         if (Key.isDown(Key.j)){
             this.move_left(1);
         }
-        if(Key.isDown(Key.i) || Key.isDown(Key.SEMICOLON)){
+        if(Key.isDown(Key.i)){
             this.jump(1);
+        }
+        else
+        {
+            p1.jumpPressed = false;
         } 
 
         //----- gamepad input handling
@@ -130,7 +138,11 @@ states.proto = {
             }
             if(gp0.buttons[11].pressed){
                 this.jump(0);
-            }  
+            } 
+            else
+            {
+                p0.jumpPressed = false;
+            } 
         }
 
         if(gp1){
@@ -147,7 +159,11 @@ states.proto = {
             }
             if(gp1.buttons[11].pressed){
                 this.jump(1);
-            }  
+            } 
+            else
+            {
+                p1.jumpPressed = false;
+            } 
         }
     },
 
@@ -164,6 +180,8 @@ states.proto = {
             platforms.some(function(e){
                 if(p.oldY + 17 <= e.y && p.y + 17 >= e.y && xVal + 16 > e.x && xVal < e.x2)
                 {
+                    playSound(sounds.land, 1, 0, .10, false);
+
                     p.yvel = 0;
                     p.y = e.y - 17;
                     p.jumping = false;
@@ -200,12 +218,16 @@ states.proto = {
     jump: function(player){
         let p = players[player];
 
-        // if(!p0.jumping){ // this gives you one free jump after falling off a platform
-        if(0 === p.yvel && !p.jumping){
-            p.jumping = true;
-            p.yvel = -p.ySpeed;
-            playSound(sounds.jump, 1, 0, .5, false);
+        if (!p.jumpPressed) {
+            // if(!p0.jumping){ // this gives you one free jump after falling off a platform
+            if(0 === p.yvel && !p.jumping){
+                p.jumping = true;
+                p.yvel = -p.ySpeed;
+                playSound(sounds.jump, 1, 0, .10, false);
+            }
         }
+
+        p.jumpPressed = true;
     },
 
     init_player: function(player){
