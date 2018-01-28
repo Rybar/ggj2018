@@ -14,12 +14,8 @@ states.proto = {
             if(gameClock === "00"){
             }
         }
-<<<<<<< HEAD
 
         this.updateFill();      
-=======
-        this.updateFill();
->>>>>>> sprite work
     },
 
     render: function(dt) {
