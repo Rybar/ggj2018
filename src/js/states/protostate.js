@@ -6,10 +6,15 @@ states.proto = {
         //game update
         platforms.forEach( function(p, index, arr){
             pat = dither[0];
-            if(p.y - viewY > HEIGHT + 20){  // Off the screen
-                arr.splice(index, 1) // Remove platform
-                var platform1 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, 19,0) //create new platform
-                var platform2 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, 3,0) //create new platform
+            if(p.y - viewY > HEIGHT + 200){  // Off the screen
+                arr.splice(index, 2) // Remove platform
+                let color1 = Math.floor(Math.random() * Math.floor(3));
+                let color2 = Math.floor(Math.random() * Math.floor(3));
+                while(color1 == color2){
+                    color2 = Math.floor(Math.random() * Math.floor(3));
+                }
+                var platform1 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, platformColors[color1],0) //create new platform
+                var platform2 = generatePlatform(arr[arr.length-1].y- platformInterval, difficulty, platformColors[color2],0) //create new platform
                 arr.push(platform1)  //Add new platform
                 arr.push(platform2)  //Add new platform
             }
