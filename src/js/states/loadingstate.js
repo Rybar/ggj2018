@@ -10,7 +10,7 @@ states.loading = {
       if(soundsReady && Key.isDown(Key.SPACE)){
         playSound(sounds.song, 1, 0, .15, true);
         state = 'proto'
-      
+        gameStartTime = t;
       }
     },
 
