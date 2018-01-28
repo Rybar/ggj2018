@@ -72,7 +72,8 @@ init = () => {
     minXvel: -250,
     facingLeft: false,
     jumping: false,
-    jumpCooldown: 0
+    jumpCooldown: 0,
+    score: 0
   },
 
   {
@@ -92,7 +93,8 @@ init = () => {
     minXvel: -250,
     facingLeft: false,
     jumping: false,
-    jumpCooldown: 0
+    jumpCooldown: 0,
+    score: 0
   } ]
 
   difficulties = [ 
@@ -120,7 +122,7 @@ init = () => {
 
   platformColors = [3,19, 35]
   
-  for(let i= 10; i > -100; i--){
+  for(let i= 2; i > -200; i--){
     let color1 = Math.floor(Math.random() * Math.floor(3));
     let color2 = Math.floor(Math.random() * Math.floor(3));
     while(color1 == color2){
