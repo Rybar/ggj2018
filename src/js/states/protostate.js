@@ -16,9 +16,6 @@ states.proto = {
         });
 
         this.updatePlayer();
-
-        
-        
     },
 
 

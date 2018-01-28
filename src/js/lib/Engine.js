@@ -1,7 +1,7 @@
 //--------------Engine.js-------------------
 
-const WIDTH =     320;
-const HEIGHT =    180;
+const WIDTH =     640;
+const HEIGHT =    480;
 const PAGES =     10;  //page = 1 screen HEIGHTxWIDTH worth of screenbuffer.
 const PAGESIZE = WIDTH*HEIGHT;
 
