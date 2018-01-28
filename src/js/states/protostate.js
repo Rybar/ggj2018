@@ -93,8 +93,8 @@ states.proto = {
         var p0 = players[0];
         var p1 = players[1];
 
-        p0.score = Math.abs(Math.floor(p0.y/platformInterval) - 2);
-        p1.score = Math.abs(Math.floor(p1.y/platformInterval) - 2);
+        p0.score = Math.abs(Math.floor(p0.y/platformInterval) - 2) + (p0.coins * coinvalue);
+        p1.score = Math.abs(Math.floor(p1.y/platformInterval) - 2) + (p1.coins * coinvalue);
 
         //Determine who's winning
         if(p0.score > p1.score){
@@ -221,6 +221,21 @@ states.proto = {
 
     collision_detect: function(player){        
         let p = players[player];
+        
+        pickups.forEach(function(c, i, a){
+            let x1check = (p.x <= c.x2 && p.x >= c.x);
+            let x2check = (p.x + p.width <= c.x2 && p.x + p.width >= c.x);
+            let y1check = (p.y <= c.y2 && p.y >= c.y);
+            let y2check = (p.y + p.height <= c.y2 && p.y + p.height >= c.y);
+
+            if ((x1check || x2check) && (y1check || y2check))
+            {
+                p.coins++;
+                a.splice(i, 1);
+            }
+        });
+
+
         if(p.yvel > 0){
             var xVal = (p.x < (WIDTH/2)) ? p.x : p.x - (WIDTH/2);
             platforms.some(function(e){

@@ -2,6 +2,7 @@
 
 states = {};
 
+
 init = () => {
   
   stats = new Stats();
@@ -77,6 +78,7 @@ init = () => {
   now = 0;
   t = 0;
 
+  coinvalue = 1,
   fill_y = HEIGHT,
   filling = false,
   time_left = 0,
@@ -104,7 +106,7 @@ init = () => {
     x: WIDTH/4,
     xMin:0,
     xMax: WIDTH/2 - 17,
-    y: 100,
+    y: HEIGHT-60,
     xvel: 0,
     yvel: 0,
     xSpeed: 300,
@@ -121,14 +123,16 @@ init = () => {
     score: 0,
     jumpPressed: false,
     status: "TIE",
-    statusColor: 4
+    statusColor: 4,
+    height: 16,
+    coins: 0
   },
 
   {
     x: (WIDTH/4)*3,
     xMin: WIDTH/2,
     xMax: WIDTH - 17,
-    y: 100,
+    y: HEIGHT-60,
     xvel: 0,
     yvel: 0,
     xSpeed: 300,
@@ -145,7 +149,9 @@ init = () => {
     score: 0,
     jumpPressed: false,
     status: "TIE",
-    statusColor: 4
+    statusColor: 4,
+    height: 16,
+    coins: 0
   } ]
 
   difficulties = [ 
@@ -204,7 +210,7 @@ platforms.forEach(function(e,i,arr){
   let px = e.x
   let py = e.y-10;
   pickups.push({
-    x: px, y: py, height: 10, width: 10
+    x: px, y: py, height: 10, width: 10, x2: px + 10, y2: py + 10 
   })
 })
   
