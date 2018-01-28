@@ -241,8 +241,9 @@ states.proto = {
         let p = players[player];
         
         pickups.forEach(function(c, i, a){
-            let x1check = (p.x <= c.x2 && p.x >= c.x);
-            let x2check = (p.x + p.width <= c.x2 && p.x + p.width >= c.x);
+            var xVal = (p.x < (WIDTH/2)) ? p.x : p.x - (WIDTH/2);
+            let x1check = (xVal <= c.x2 && xVal >= c.x);
+            let x2check = (xVal + p.width <= c.x2 && xVal + p.width >= c.x);
             let y1check = (p.y <= c.y2 && p.y >= c.y);
             let y2check = (p.y + p.height <= c.y2 && p.y + p.height >= c.y);
 
