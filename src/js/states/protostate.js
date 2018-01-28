@@ -50,18 +50,34 @@ states.proto = {
                 fillCircle(orb.x, orb.y-viewY, orb.r, orb.color);
             }
         })
-
-        fillRect(0, 0, WIDTH, fill_y, platformColors[fillColor], platformColors[fillColor]);
+        pat = dither[8];
+        fillRect(0, 0, WIDTH, fill_y, platformColors[fillColor], 0);
+        pat = dither[8];
+        fillRect(0, fill_y, WIDTH, fill_y+10, platformColors[prevFillColor], 0);
+        pat = dither[4];
+        fillRect(0, fill_y+5, WIDTH, fill_y+10, platformColors[prevFillColor], 0);
+        pat = dither[2];
+        fillRect(0, fill_y+9, WIDTH, fill_y+10, platformColors[prevFillColor], 0);
+        pat = dither[8];
+        for(let i = 0; i < 100; i++){
+            let x = Math.random()*WIDTH;
+            pset(x, fill_y+10, 22,22);
+            circle(x, fill_y+10, Math.random()*3|0, platformColors[fillColor],22)
+        }
+        
         if(true === filling)
         {
-          fillRect(0, fill_y + 1, WIDTH, HEIGHT, platformColors[prevFillColor], platformColors[prevFillColor]);
+            pat = dither[8];
+            fillRect(0, fill_y + 1, WIDTH, HEIGHT, platformColors[prevFillColor], 0);
         }   
 
         platforms.forEach( function(p){
-            if(p.y - viewY < HEIGHT && p.y - viewY > 0){
-                renderTarget = BUFFER;
-                pat = dither[0];
-                fillRect(p.x, p.y-viewY, p.x2, p.y2-viewY, p.color, p.color-1); 
+            if(p.canCollide[side]){
+                if(p.y - viewY < HEIGHT && p.y - viewY > 0){
+                    renderTarget = BUFFER;
+                    pat = dither[0];
+                    fillRect(p.x, p.y-viewY, p.x2, p.y2-viewY, p.color, p.color-1); 
+                }   
             }   
         });
 
@@ -86,6 +102,8 @@ states.proto = {
         fillRect(startDrawX, HEIGHT, endDrawX,  HEIGHT, 30)
         renderSource = BUFFER; 
         spr(0,0,WIDTH/2,HEIGHT, side==0 ? 0 : WIDTH/2, 0)
+
+        line(WIDTH/2,0,WIDTH/2,HEIGHT,22,22);
 
     },
 

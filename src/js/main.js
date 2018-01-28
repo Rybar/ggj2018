@@ -187,7 +187,7 @@ init = () => {
   pickups = [];
   backgroundOrbs = [];
 
-  platformColors = [3,19, 35]
+  platformColors = [7,13,27]
     platforms.push({
     x: 10, y: HEIGHT-30, x2: WIDTH/2-10, y2: HEIGHT-20, color: 22, color2: 22, canCollide: [true, true]
   })
