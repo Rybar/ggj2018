@@ -2,7 +2,6 @@
 
 states = {};
 
-
 init = () => {
   
   stats = new Stats();
@@ -140,9 +139,9 @@ init = () => {
     drag: .8,
     gravity: 25,
     maxYvel: 250,
-    maxXvel: 250,
+    maxXvel: 180,
     minYvel: -700,
-    minXvel: -250,
+    minXvel: -180,
     facingLeft: false,
     jumping: false,
     jumpCooldown: 0,

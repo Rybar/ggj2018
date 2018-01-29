@@ -5,7 +5,8 @@ states.gameover = {
     step: function(dt) {
 
         if(Key.isDown(Key.r)){
-          state = 'menu';
+          init();
+          
         }
 
     },

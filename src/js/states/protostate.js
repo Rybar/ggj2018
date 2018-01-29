@@ -204,6 +204,12 @@ states.proto = {
             {
                 p0.jumpPressed = false;
             } 
+            if (gp0.buttons[3].pressed) {
+                this.move_right(0);
+            }
+            if (gp0.buttons[2].pressed){
+                this.move_left(0);
+            }
         }
 
         if(gp1){
@@ -224,6 +230,12 @@ states.proto = {
             else
             {
                 p1.jumpPressed = false;
+            }
+            if (gp1.buttons[3].pressed) {
+                this.move_right(1);
+            }
+            if (gp1.buttons[2].pressed){
+                this.move_left(1);
             } 
         }
     },
